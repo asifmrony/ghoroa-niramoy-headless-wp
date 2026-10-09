@@ -1,0 +1,506 @@
+{
+  "_about": "Seed content for the GhoroaNiramoy WordPress install (spec §11). Field names follow the Astro types; map them per spec §4. Placeholder values (refs, nutrition table) must be replaced before publishing for real.",
+  "categories": [
+    {
+      "slug": "gharoa-totka",
+      "name": "ঘরোয়া টোটকা",
+      "description": "ঘরের হাতের কাছের উপকরণ দিয়ে ছোটখাটো সমস্যায় প্রচলিত ঘরোয়া উপায়: কতটুকু কাজে দিতে পারে, আর কখন ডাক্তার দেখানো জরুরি।"
+    },
+    {
+      "slug": "veshoj-udbhid",
+      "name": "ভেষজ উদ্ভিদ",
+      "description": "উঠোন আর ছাদের ঔষধি গাছ চেনা, প্রচলিত ব্যবহার, গবেষণা কী বলে আর কারা এড়িয়ে চলবেন।"
+    },
+    {
+      "slug": "rannaghorer-mosla",
+      "name": "রান্নাঘরের মসলা",
+      "description": "রোজকার মসলার পুষ্টিগুণ, রান্নায় ব্যবহার আর সুস্থতায় এদের সম্ভাব্য ভূমিকা।"
+    },
+    {
+      "slug": "chhadbagan",
+      "name": "ছাদবাগান",
+      "description": "টবে আর ছাদে সবজি, ফল ও ঔষধি গাছ চাষের হাতে-কলমে গাইড।"
+    }
+  ],
+  "tags": [
+    {
+      "slug": "thankuni",
+      "name": "থানকুনি"
+    },
+    {
+      "slug": "oushodhi-gach",
+      "name": "ঔষধি গাছ"
+    },
+    {
+      "slug": "hojom",
+      "name": "হজম"
+    },
+    {
+      "slug": "toker-jotno",
+      "name": "ত্বকের যত্ন"
+    },
+    {
+      "slug": "jaibo-chash",
+      "name": "জৈব চাষ"
+    },
+    {
+      "slug": "shordi-kashi",
+      "name": "সর্দি-কাশি"
+    },
+    {
+      "slug": "gachpala",
+      "name": "গাছপালা"
+    }
+  ],
+  "authors": [
+    {
+      "slug": "nusrat-jahan",
+      "name": "নুসরাত জাহান",
+      "bio": "ভেষজ উদ্ভিদ ও ঘরোয়া টোটকা নিয়ে লেখেন। দশ বছর ধরে নিজের ছাদবাগানে ঔষধি গাছ চাষ করছেন।"
+    },
+    {
+      "slug": "rumana-akter",
+      "name": "রুমানা আক্তার"
+    },
+    {
+      "slug": "tanvir-hasan",
+      "name": "তানভীর হাসান"
+    }
+  ],
+  "posts": [
+    {
+      "slug": "thankuni-patar-upokarita",
+      "title": "থানকুনি পাতার ১০টি অভাবনীয় উপকারিতা",
+      "excerpt": "হজমশক্তি বাড়ানো থেকে স্মৃতিশক্তি ধরে রাখা — উঠোনের কোণে জন্মানো ছোট্ট এই পাতাটি কীভাবে প্রতিদিনের সুস্থতায় কাজে লাগাবেন, জেনে নিন সহজ ভাষায়।",
+      "dek": "উঠোনের কোণে জন্মানো ছোট্ট এই পাতা কীভাবে হজম, ত্বক আর মনোযোগের যত্নে কাজে লাগাবেন, কতটুকু খাবেন আর কারা এড়িয়ে চলবেন, জেনে নিন এক লেখায়।",
+      "category": "veshoj-udbhid",
+      "date": "2026-10-02T08:00:00+06:00",
+      "updated": "2026-10-03T09:00:00+06:00",
+      "readingMinutes": 7,
+      "medicallyReviewed": true,
+      "isHealth": true,
+      "leadCaption": "সকালের রোদে টবে বেড়ে ওঠা থানকুনি।",
+      "leadCredit": "Photo: GhoroaNiramoy",
+      "contentHtml": "<div class=\"gn-takeaways\"><h4>Key takeaways</h4><ul>\n  <li>দিনে ৮–১০টি টাটকা পাতাই যথেষ্ট; বেশি খেলে উপকার বাড়ে না।</li>\n  <li>হজম, ত্বক ও মনোযোগে সহায়ক হতে পারে, তবে এটি ওষুধের বিকল্প নয়।</li>\n  <li>গর্ভাবস্থায়, লিভারের সমস্যায় বা নিয়মিত ওষুধ খেলে আগে চিকিৎসকের পরামর্শ নিন।</li>\n</ul></div>\n\n<h2 id=\"intro\">থানকুনি কী</h2>\n<p>থানকুনি (Centella asiatica) আমাদের গ্রামবাংলার অতি পরিচিত এক লতানো ভেষজ। পুকুরপাড়, উঠোনের ভেজা কোণ কিংবা ছাদের টবে সহজেই জন্মায়। গোল, খাঁজকাটা পাতার এই গাছটি প্রজন্ম ধরে আমাদের দাদি-নানিদের ঘরোয়া টোটকার তালিকায় জায়গা করে আছে।</p>\n<p>আয়ুর্বেদে একে বলা হয় “মণ্ডূকপর্ণী”, আর আধুনিক গবেষণাও এর কয়েকটি উপাদান নিয়ে আগ্রহ দেখাচ্ছে। চলুন জেনে নিই, কোন কোন ক্ষেত্রে থানকুনি <a href=\"#\">সাহায্য করতে পারে</a>।</p>\n\n<h2 id=\"benefits\">থানকুনি পাতার ১০টি উপকারিতা</h2>\n<h3 id=\"b1\"><span class=\"gn-num\">১</span><span>হজমে সাহায্য করতে পারে</span></h3>\n<p>থানকুনির তেতো স্বাদ পাচনরস নিঃসরণে সহায়ক বলে প্রচলিত বিশ্বাস। সকালে খালি পেটে অল্প পরিমাণ পাতা বা রস অনেকে নিয়মিত খান।</p>\n<h3 id=\"b2\"><span class=\"gn-num\">২</span><span>মনোযোগ ও স্মৃতিশক্তি</span></h3>\n<p>আয়ুর্বেদে থানকুনি “মেধ্য রসায়ন” হিসেবে পরিচিত। কিছু প্রাথমিক গবেষণায় স্মৃতিশক্তিতে ইতিবাচক প্রভাবের ইঙ্গিত মিলেছে, তবে আরও গবেষণা দরকার।</p>\n<h3 id=\"b3\"><span class=\"gn-num\">৩</span><span>ক্ষত শুকাতে সহায়ক</span></h3>\n<p>পাতায় থাকা এশিয়াটিকোসাইড ত্বকের কোলাজেন তৈরিতে সাহায্য করতে পারে বলে গবেষণায় দেখা গেছে। ছোটখাটো কাটাছেঁড়ায় বাটা পাতার প্রলেপ প্রচলিত।</p>\n<h3 id=\"b4\"><span class=\"gn-num\">৪</span><span>ত্বকের যত্নে</span></h3>\n<p>অ্যান্টিঅক্সিডেন্ট উপাদানের কারণে ত্বকের প্রসাধনীতে থানকুনির নির্যাস ব্যবহার হয়।</p>\n\n<!-- gn-ad -->\n<h3 id=\"b5\"><span class=\"gn-num\">৫</span><span>রক্তসঞ্চালন</span></h3>\n<p>পায়ের শিরায় রক্তপ্রবাহ ভালো রাখতে থানকুনির নির্যাস নিয়ে কিছু ক্লিনিক্যাল গবেষণা হয়েছে।</p>\n<h3 id=\"b6\"><span class=\"gn-num\">৬</span><span>মানসিক চাপ কমাতে</span></h3>\n<p>প্রচলিত চিকিৎসায় থানকুনিকে প্রশান্তিদায়ক ভেষজ ধরা হয়।</p>\n<h3 id=\"b7\"><span class=\"gn-num\">৭</span><span>মুখের ঘা</span></h3>\n<p>পাতা চিবিয়ে খাওয়ার গ্রামীণ অভ্যাস মুখের ছোট ঘায়ে আরাম দেয় বলে অনেকের অভিজ্ঞতা।</p>\n\n<blockquote>“ঘরের কাছের গাছটাই অনেক সময় সবচেয়ে কাজের বন্ধু।”<cite>— ঘরোয়া নিরাময়ের রান্নাঘর থেকে</cite></blockquote>\n<h3 id=\"b8\"><span class=\"gn-num\">৮</span><span>রোগপ্রতিরোধে</span></h3>\n<p>ভিটামিন সি ও নানা খনিজ থাকায় খাদ্যতালিকায় শাক হিসেবে থানকুনি পুষ্টি যোগ করে।</p>\n<h3 id=\"b9\"><span class=\"gn-num\">৯</span><span>অন্ত্রের আরাম</span></h3>\n<p>পেট ফাঁপা বা হালকা অস্বস্তিতে থানকুনির ঝোল বা ভর্তা ঘরোয়া খাবার হিসেবে খাওয়া হয়।</p>\n<h3 id=\"b10\"><span class=\"gn-num\">১০</span><span>সহজে চাষযোগ্য</span></h3>\n<p>ছায়াযুক্ত ভেজা মাটিতে টবেই থানকুনি জন্মায়, ফলে সারা বছর টাটকা পাতা হাতের কাছে থাকে।</p>\n\n\n<h2 id=\"nutrition\">পুষ্টিগুণ এক নজরে</h2>\n<figure class=\"gn-table-wrap\"><table>\n  <thead><tr><th>উপাদান</th><th>কী কাজে লাগে</th><th>পরিমাণ (প্রতি ১০০ গ্রাম)</th></tr></thead>\n  <tbody>\n    <tr><td>ভিটামিন সি</td><td>রোগপ্রতিরোধ</td><td class=\"num\">≈ 48 mg</td></tr>\n    <tr><td>ক্যালসিয়াম</td><td>হাড় ও দাঁত</td><td class=\"num\">≈ 170 mg</td></tr>\n    <tr><td>আয়রন</td><td>রক্তের হিমোগ্লোবিন</td><td class=\"num\">≈ 5.6 mg</td></tr>\n  </tbody></table>\n  <figcaption>নমুনা মান, প্রকাশের আগে যাচাইকৃত সূত্র থেকে বসাতে হবে।</figcaption></figure>\n\n<h2 id=\"how\">কীভাবে খাবেন</h2>\n<p>সবচেয়ে সহজ উপায় হলো টাটকা পাতা ধুয়ে ভর্তা বা রস করে খাওয়া। নিচের রেসিপিটি দুজনের জন্য।</p>\n<div class=\"gn-recipe\">\n  <div class=\"gn-recipe__head\"><h3 class=\"gn-recipe__title\">থানকুনি পাতার রস</h3><div class=\"gn-recipe__facts\"><span>5 min</span><span>2 servings</span></div></div>\n  <div class=\"gn-recipe__grid\">\n    <div><h4>Ingredients</h4><ul>\n      <li><span>টাটকা থানকুনি পাতা</span><span>১ মুঠো</span></li>\n      <li><span>ঠান্ডা পানি</span><span>১ কাপ</span></li>\n      <li><span>লেবুর রস</span><span>১ চা চামচ</span></li>\n      <li><span>মধু (ঐচ্ছিক)</span><span>১ চা চামচ</span></li>\n    </ul></div>\n    <div><h4>Method</h4><ol>\n      <li>পাতা ভালো করে কয়েকবার ধুয়ে নিন।</li>\n      <li>পানি দিয়ে ব্লেন্ড করে ছেঁকে নিন।</li>\n      <li>লেবুর রস ও মধু মিশিয়ে সকালে খালি পেটে পান করুন।</li>\n    </ol></div>\n  </div>\n</div>\n<div class=\"gn-callout gn-callout--tip\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 19C5 11 10 6 19 5c0 9-5 14-14 14z\"/><path d=\"M5 19 13 11\"/></svg><div><span class=\"gn-callout__title\">ছাদবাগানের টিপস</span>টবে থানকুনি লাগাতে চাইলে আধা-ছায়া জায়গা বেছে নিন আর মাটি সবসময় হালকা ভেজা রাখুন। <a href=\"#\">টবে থানকুনি চাষের পুরো গাইড</a></div></div>\n\n<h2 id=\"caution\">সতর্কতা</h2>\n<div class=\"gn-callout gn-callout--caution\"><svg stroke=\"currentColor\" viewBox=\"0 0 24 24\" fill=\"none\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3 2 20h20L12 3z\"/><path d=\"M12 10v4M12 17h.01\"/></svg><div><span class=\"gn-callout__title\">কারা এড়িয়ে চলবেন</span><ul>\n  <li>গর্ভবতী ও স্তন্যদানকারী মায়েরা</li>\n  <li>লিভারের রোগ আছে এমন ব্যক্তি</li>\n  <li>ঘুমের ওষুধ বা রক্ত পাতলা করার ওষুধ যাঁরা খান</li>\n</ul>নিয়মিত খাওয়ার আগে চিকিৎসকের সঙ্গে কথা বলুন।</div></div>\n\n<h2 id=\"refs\">সূত্র</h2>\n<div class=\"gn-refs\"><ol>\n  <li>সূত্রের শিরোনাম, প্রকাশক, সাল। <a href=\"#\">লিংক</a></li>\n  <li>সূত্রের শিরোনাম, প্রকাশক, সাল। <a href=\"#\">লিংক</a></li>\n</ol></div>\n",
+      "toc": [
+        {
+          "id": "intro",
+          "label": "থানকুনি কী"
+        },
+        {
+          "id": "benefits",
+          "label": "১০টি উপকারিতা"
+        },
+        {
+          "id": "nutrition",
+          "label": "পুষ্টিগুণ"
+        },
+        {
+          "id": "how",
+          "label": "কীভাবে খাবেন"
+        },
+        {
+          "id": "caution",
+          "label": "সতর্কতা"
+        },
+        {
+          "id": "refs",
+          "label": "সূত্র"
+        }
+      ],
+      "tags": [
+        {
+          "slug": "thankuni",
+          "name": "থানকুনি"
+        },
+        {
+          "slug": "oushodhi-gach",
+          "name": "ঔষধি গাছ"
+        },
+        {
+          "slug": "hojom",
+          "name": "হজম"
+        },
+        {
+          "slug": "toker-jotno",
+          "name": "ত্বকের যত্ন"
+        }
+      ],
+      "author": "nusrat-jahan"
+    },
+    {
+      "slug": "sojne-patar-gura",
+      "tags": [
+        {
+          "slug": "oushodhi-gach",
+          "name": "ঔষধি গাছ"
+        }
+      ],
+      "title": "সজনে পাতার গুঁড়া বানানোর সহজ পদ্ধতি",
+      "excerpt": "রোদে শুকানো থেকে সংরক্ষণ — ঘরেই সজনে পাতার গুঁড়া বানানোর ধাপগুলো।",
+      "category": "veshoj-udbhid",
+      "date": "2026-10-03T11:50:00+06:00",
+      "readingMinutes": 4,
+      "author": "rumana-akter"
+    },
+    {
+      "slug": "morich-gache-pata-kokrano",
+      "tags": [
+        {
+          "slug": "jaibo-chash",
+          "name": "জৈব চাষ"
+        }
+      ],
+      "title": "ছাদে মরিচ গাছে পাতা কোঁকড়ানো রোগের প্রতিকার",
+      "excerpt": "পাতা কোঁকড়ানোর সাধারণ কারণ আর জৈব উপায়ে সামলানোর কৌশল।",
+      "category": "chhadbagan",
+      "date": "2026-10-03T11:28:00+06:00",
+      "readingMinutes": 5,
+      "author": "tanvir-hasan"
+    },
+    {
+      "slug": "daruchini-rokte-shorkora",
+      "title": "দারুচিনি কি সত্যিই রক্তে শর্করা কমায়?",
+      "excerpt": "গবেষণা কী বলে, কতটুকু নিরাপদ, আর কেন এটি ডায়াবেটিসের ওষুধের বিকল্প নয়।",
+      "category": "rannaghorer-mosla",
+      "date": "2026-10-03T11:00:00+06:00",
+      "readingMinutes": 6,
+      "author": "nusrat-jahan"
+    },
+    {
+      "slug": "nimpatar-spray",
+      "tags": [
+        {
+          "slug": "jaibo-chash",
+          "name": "জৈব চাষ"
+        },
+        {
+          "slug": "oushodhi-gach",
+          "name": "ঔষধি গাছ"
+        }
+      ],
+      "title": "নিমপাতার স্প্রে: জৈব কীটনাশক তৈরির নিয়ম",
+      "excerpt": "ছাদবাগানের পোকা দমনে নিমপাতার স্প্রে বানানো আর ব্যবহারের সঠিক মাত্রা।",
+      "category": "chhadbagan",
+      "date": "2026-10-03T09:00:00+06:00",
+      "readingMinutes": 4,
+      "author": "tanvir-hasan"
+    },
+    {
+      "slug": "narkel-tel-modhu-toker-jotno",
+      "tags": [
+        {
+          "slug": "toker-jotno",
+          "name": "ত্বকের যত্ন"
+        }
+      ],
+      "title": "শীতে ত্বকের যত্নে নারকেল তেল আর মধু",
+      "excerpt": "শুষ্ক ত্বকে নারকেল তেল আর মধুর ঘরোয়া ব্যবহার, আর কাদের আগে প্যাচ টেস্ট করা উচিত।",
+      "category": "gharoa-totka",
+      "date": "2026-10-03T07:00:00+06:00",
+      "readingMinutes": 5,
+      "author": "rumana-akter"
+    },
+    {
+      "slug": "ada-modhur-cha",
+      "tags": [
+        {
+          "slug": "shordi-kashi",
+          "name": "সর্দি-কাশি"
+        }
+      ],
+      "title": "আদা-মধুর চা: সর্দি-কাশির সহজ ঘরোয়া সমাধান",
+      "excerpt": "গলা খুসখুস আর হালকা জ্বরে এক কাপ আদা-মধুর চা কতটা কাজে দেয়, আর কখন ডাক্তারের কাছে যাওয়া জরুরি।",
+      "category": "gharoa-totka",
+      "date": "2026-10-01T18:00:00+06:00",
+      "readingMinutes": 5,
+      "author": "rumana-akter"
+    },
+    {
+      "slug": "tobe-lebu-gach",
+      "title": "টবে লেবু গাছ: ফলন বাড়ানোর ৭টি কৌশল",
+      "excerpt": "মাটি তৈরি থেকে ছাঁটাই — ছাদের ছোট্ট জায়গাতেও সারা বছর লেবু পেতে যা মানতে হবে।",
+      "category": "chhadbagan",
+      "date": "2026-10-01T15:00:00+06:00",
+      "readingMinutes": 6,
+      "author": "tanvir-hasan"
+    },
+    {
+      "slug": "holud-golmorich",
+      "title": "হলুদ আর গোলমরিচ: একসাথে খেলে কেন বেশি উপকার",
+      "excerpt": "কারকিউমিন শরীরে শোষণ হতে গোলমরিচের পিপারিন কীভাবে সাহায্য করে, সহজ ব্যাখ্যা।",
+      "category": "rannaghorer-mosla",
+      "date": "2026-10-01T12:00:00+06:00",
+      "readingMinutes": 4,
+      "author": "nusrat-jahan"
+    },
+    {
+      "slug": "tulsi-patar-ros",
+      "tags": [
+        {
+          "slug": "oushodhi-gach",
+          "name": "ঔষধি গাছ"
+        },
+        {
+          "slug": "shordi-kashi",
+          "name": "সর্দি-কাশি"
+        }
+      ],
+      "title": "তুলসী পাতার রস: কখন, কতটুকু খাবেন",
+      "excerpt": "প্রতিদিন সকালে তুলসী পাতা চিবানোর অভ্যাস কতটা নিরাপদ, আর কারা এড়িয়ে চলবেন।",
+      "category": "veshoj-udbhid",
+      "date": "2026-10-01T10:00:00+06:00",
+      "readingMinutes": 5,
+      "author": "rumana-akter"
+    },
+    {
+      "slug": "aloevera-pata-poche-jacche",
+      "title": "বর্ষায় অ্যালোভেরার পাতা পচে যাচ্ছে? যা করবেন",
+      "excerpt": "জল নিষ্কাশন, টবের মাপ আর রোদের হিসাব — তিনটি ভুলেই সবচেয়ে বেশি গাছ নষ্ট হয়।",
+      "category": "chhadbagan",
+      "cardTag": {
+        "slug": "gachpala",
+        "name": "গাছপালা"
+      },
+      "tags": [
+        {
+          "slug": "gachpala",
+          "name": "গাছপালা"
+        }
+      ],
+      "date": "2026-10-01T08:00:00+06:00",
+      "readingMinutes": 3,
+      "author": "tanvir-hasan"
+    },
+    {
+      "slug": "lobon-panir-gargle",
+      "tags": [
+        {
+          "slug": "shordi-kashi",
+          "name": "সর্দি-কাশি"
+        }
+      ],
+      "title": "গলা ব্যথায় লবণ-পানির গার্গল: সঠিক নিয়ম",
+      "excerpt": "কুসুম গরম পানিতে কতটুকু লবণ, দিনে কয়বার — ছোট্ট এই অভ্যাসের পুরো নিয়ম।",
+      "category": "gharoa-totka",
+      "date": "2026-09-30T18:00:00+06:00",
+      "readingMinutes": 6,
+      "author": "rumana-akter"
+    },
+    {
+      "slug": "pet-fapay-joan-pani",
+      "tags": [
+        {
+          "slug": "hojom",
+          "name": "হজম"
+        }
+      ],
+      "title": "পেট ফাঁপায় জোয়ান ভেজানো পানি",
+      "excerpt": "জোয়ান ভেজানো পানি কীভাবে বানাবেন আর পেট ফাঁপায় কখন সাহায্য করতে পারে।",
+      "category": "gharoa-totka",
+      "date": "2026-09-30T14:00:00+06:00",
+      "readingMinutes": 4,
+      "author": "nusrat-jahan"
+    },
+    {
+      "slug": "mathabethay-pudina-tel",
+      "title": "মাথাব্যথায় পুদিনা তেলের ব্যবহার",
+      "excerpt": "কপালে পুদিনা তেল লাগানোর নিয়ম, পরিমাণ আর কাদের জন্য নয়।",
+      "category": "gharoa-totka",
+      "date": "2026-09-30T10:00:00+06:00",
+      "readingMinutes": 3,
+      "author": "rumana-akter"
+    },
+    {
+      "slug": "methi-bhejano-pani",
+      "title": "মেথি ভেজানো পানি: সকালের অভ্যাসে কী বদলায়",
+      "excerpt": "রক্তে শর্করা, হজম আর চুলের যত্নে মেথির প্রচলিত ব্যবহার ও গবেষণা কী বলে।",
+      "category": "gharoa-totka",
+      "date": "2026-09-29T09:00:00+06:00",
+      "readingMinutes": 6,
+      "author": "nusrat-jahan"
+    },
+    {
+      "slug": "nimgach",
+      "tags": [
+        {
+          "slug": "oushodhi-gach",
+          "name": "ঔষধি গাছ"
+        }
+      ],
+      "title": "নিমগাছ: উঠোনের প্রাকৃতিক ফার্মেসি",
+      "excerpt": "পাতা, ছাল আর ডাল — নিমের প্রতিটি অংশের প্রচলিত ব্যবহার ও সতর্কতা।",
+      "category": "veshoj-udbhid",
+      "date": "2026-09-30T18:00:00+06:00",
+      "readingMinutes": 6,
+      "author": "rumana-akter"
+    },
+    {
+      "slug": "basok-pata-chenar-upay",
+      "tags": [
+        {
+          "slug": "oushodhi-gach",
+          "name": "ঔষধি গাছ"
+        },
+        {
+          "slug": "shordi-kashi",
+          "name": "সর্দি-কাশি"
+        }
+      ],
+      "title": "বাসক পাতা চেনার সহজ উপায়",
+      "excerpt": "কাছাকাছি দেখতে গাছের ভিড়ে বাসক চেনার পাতা, ফুল আর গন্ধের চিহ্ন।",
+      "category": "veshoj-udbhid",
+      "date": "2026-09-30T14:00:00+06:00",
+      "readingMinutes": 4,
+      "author": "nusrat-jahan"
+    },
+    {
+      "slug": "ashwagandha",
+      "title": "অশ্বগন্ধা নিয়ে যা জানা জরুরি",
+      "excerpt": "অশ্বগন্ধার প্রচলিত ব্যবহার, গবেষণার সীমা আর কারা এড়িয়ে চলবেন।",
+      "category": "veshoj-udbhid",
+      "date": "2026-09-30T10:00:00+06:00",
+      "readingMinutes": 3,
+      "author": "nusrat-jahan"
+    },
+    {
+      "slug": "kalojira",
+      "title": "কালোজিরা: রোজ এক চিমটি কেন",
+      "excerpt": "প্রাচীন এই মসলার পুষ্টিগুণ আর রান্নায় ব্যবহারের পাঁচটি উপায়।",
+      "category": "rannaghorer-mosla",
+      "date": "2026-09-30T18:00:00+06:00",
+      "readingMinutes": 6,
+      "author": "rumana-akter"
+    },
+    {
+      "slug": "lobongo-datbethay",
+      "title": "লবঙ্গ দিয়ে দাঁতব্যথার প্রাথমিক উপশম",
+      "excerpt": "ডাক্তার দেখানোর আগে লবঙ্গ কীভাবে সাময়িক আরাম দিতে পারে।",
+      "category": "rannaghorer-mosla",
+      "date": "2026-09-30T14:00:00+06:00",
+      "readingMinutes": 4,
+      "author": "nusrat-jahan"
+    },
+    {
+      "slug": "elacher-cha",
+      "tags": [
+        {
+          "slug": "hojom",
+          "name": "হজম"
+        }
+      ],
+      "title": "এলাচের চা: হজমের পুরনো সঙ্গী",
+      "excerpt": "ভারী খাবারের পর এলাচের চা বানানোর নিয়ম আর পরিমাণ।",
+      "category": "rannaghorer-mosla",
+      "date": "2026-09-30T10:00:00+06:00",
+      "readingMinutes": 3,
+      "author": "rumana-akter"
+    },
+    {
+      "slug": "prothom-chhadbagan",
+      "title": "প্রথম ছাদবাগান: ১০টি টব দিয়ে শুরু",
+      "excerpt": "কোন সবজি দিয়ে শুরু করবেন, মাটি কোথায় পাবেন আর পানি দেবেন কখন।",
+      "category": "chhadbagan",
+      "date": "2026-09-30T18:00:00+06:00",
+      "readingMinutes": 6,
+      "author": "rumana-akter"
+    },
+    {
+      "slug": "rannaghorer-borjo-theke-jaibo-sar",
+      "tags": [
+        {
+          "slug": "jaibo-chash",
+          "name": "জৈব চাষ"
+        }
+      ],
+      "title": "রান্নাঘরের বর্জ্য থেকে জৈব সার",
+      "excerpt": "সবজির খোসা আর চায়ের পাতা দিয়ে বালতিতে কম্পোস্ট বানানোর ধাপ।",
+      "category": "chhadbagan",
+      "date": "2026-09-30T14:00:00+06:00",
+      "readingMinutes": 4,
+      "author": "tanvir-hasan"
+    },
+    {
+      "slug": "tobe-dhonepata",
+      "title": "টবে ধনেপাতা সারা বছর",
+      "excerpt": "বীজ ভেজানো থেকে বারবার কাটা — সারা বছর ধনেপাতা পাওয়ার নিয়ম।",
+      "category": "chhadbagan",
+      "date": "2026-09-30T10:00:00+06:00",
+      "readingMinutes": 3,
+      "author": "tanvir-hasan"
+    }
+  ],
+  "videos": [
+    {
+      "slug": "baranday-pudina-chash",
+      "date": "2026-10-01T10:00:00+06:00",
+      "description": "টবে পুদিনার বীজ বোনা থেকে প্রথমবার পাতা তোলা পর্যন্ত, বারান্দার অল্প রোদেও যেভাবে করবেন।",
+      "title": "বারান্দায় পুদিনা চাষ: বীজ থেকে প্রথম ফসল",
+      "duration": "11:30"
+    },
+    {
+      "slug": "kancha-holuder-achar",
+      "date": "2026-09-27T10:00:00+06:00",
+      "description": "সরষের তেল আর কাঁচা হলুদ দিয়ে পুরনো পারিবারিক রেসিপিতে আচার বানানো ও সংরক্ষণ।",
+      "title": "দাদির হাতের কাঁচা হলুদের আচার",
+      "duration": "08:15"
+    },
+    {
+      "slug": "kencho-sar-toiri",
+      "date": "2026-09-22T10:00:00+06:00",
+      "description": "কেঁচো, রান্নাঘরের বর্জ্য আর একটি ড্রাম দিয়ে ছাদে ভার্মিকম্পোস্ট তৈরির পুরো প্রক্রিয়া।",
+      "title": "ছাদবাগানে কেঁচো সার তৈরির পুরো প্রক্রিয়া",
+      "duration": "14:02"
+    },
+    {
+      "slug": "thankuni-bhorta",
+      "date": "2026-09-18T10:00:00+06:00",
+      "description": "থানকুনি পাতার তিন রকম ভর্তা: সরষে, শুঁটকি আর নারকেল দিয়ে।",
+      "title": "থানকুনি পাতার ভর্তা — তিন রকম",
+      "duration": "06:48"
+    },
+    {
+      "slug": "tobe-tulsi-chara",
+      "date": "2026-09-12T10:00:00+06:00",
+      "description": "কোন মৌসুমে, কেমন মাটিতে আর কতটা রোদে টবে তুলসীর চারা লাগালে ভালো বাড়ে।",
+      "title": "টবে তুলসী চারা লাগানোর সঠিক সময়",
+      "duration": "09:20"
+    },
+    {
+      "slug": "ada-roshun-paste",
+      "date": "2026-09-05T10:00:00+06:00",
+      "description": "একবারে বেশি আদা-রসুন বেটে ফ্রিজে আর ফ্রিজারে নিরাপদে রাখার নিয়ম।",
+      "title": "আদা-রসুনের পেস্ট ঘরে বানিয়ে সংরক্ষণ",
+      "duration": "05:40"
+    }
+  ],
+  "homepageOptions": {
+    "hero": "thankuni-patar-upokarita",
+    "videoPicks": [
+      "baranday-pudina-chash",
+      "kancha-holuder-achar",
+      "kencho-sar-toiri",
+      "thankuni-bhorta",
+      "tobe-tulsi-chara",
+      "ada-roshun-paste"
+    ],
+    "popularPicks": [
+      "ada-modhur-cha",
+      "tobe-lebu-gach",
+      "tulsi-patar-ros",
+      "kalojira"
+    ],
+    "promo": {
+      "label": "নতুন:",
+      "text": "শীতের ছাদবাগান গাইড →",
+      "url": "/chhadbagan/"
+    },
+    "popularSearches": [
+      "থানকুনি",
+      "হলুদ",
+      "তুলসী",
+      "অ্যালোভেরা",
+      "টমেটো চারা"
+    ]
+  }
+}

@@ -1,0 +1,93 @@
+/* GhoroaNiramoy tokens — generated from tokens.json. Do not hand-edit; change tokens.json and regenerate. */
+@font-face { font-family: 'Kalpurush'; src: url('../fonts/Kalpurush.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+
+:root, [data-theme="light"] {
+  --primary: #2D6A4F;
+  --primary-deep: #1F5039;
+  --on-primary: #FFFFFF;
+  --secondary: #74C69D;
+  --leaf-tint: #DCEFE3;
+  --background: #FFFFFF;
+  --surface: #F5F5DC;
+  --surface-sunk: #ECEBCF;
+  --ink: #1E4B3C;
+  --ink-muted: #52695F;
+  --line: #DAD8BA;
+  --line-strong: #7A8B6E;
+  --amber-bg: #FCF0D4;
+  --amber-line: #D9A23B;
+  --amber-ink: #6A4A0F;
+  --on-secondary: #1E4B3C;
+  --band-bg: var(--primary-deep);
+  --footer-bg: #1E4B3C;
+  --on-band: #FFFFFF;
+  --on-band-muted: #DCEFE3;
+  --brand-plate: rgba(255, 253, 245, 0);
+  --logo-plate: #F5F5DC;
+  --focus-ring: var(--primary);
+  --overlay: rgba(30, 75, 60, 0.55);
+  --logo-green: #107048;
+  --logo-leaf: #52C28A;
+  --shadow-rest: 0 1px 2px rgba(30, 75, 60, 0.06);
+  --shadow-hover: 0 10px 28px rgba(30, 75, 60, 0.12);
+  --shadow-overlay: 0 24px 60px rgba(30, 75, 60, 0.25);
+}
+[data-theme="dark"] {
+  --primary: #6CC496;
+  --primary-deep: #8DD4AE;
+  --on-primary: #0F241A;
+  --leaf-tint: #1F3B2E;
+  --background: #131B17;
+  --surface: #1B2621;
+  --surface-sunk: #0F1613;
+  --ink: #E6EEE6;
+  --ink-muted: #A7B8AD;
+  --line: #2A3830;
+  --line-strong: #6B8476;
+  --amber-bg: #2B2312;
+  --amber-line: #C99232;
+  --amber-ink: #F0D9A6;
+  --on-secondary: #143326;
+  --band-bg: #173A2B;
+  --footer-bg: #0B120F;
+  --on-band: #F1F6F1;
+  --on-band-muted: #C3D6CA;
+  --brand-plate: #F5F5DC;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --shadow-rest: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 10px 28px rgba(0, 0, 0, 0.45);
+  --shadow-overlay: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --container: 1200px;
+  --ad-min-height: 250px;
+  --header-height: 128px;
+  --font-bn: Kalpurush, "Hind Siliguri", "Noto Sans Bengali", sans-serif;
+  --font-bn-alt: Kalpurush, "Hind Siliguri", "Noto Sans Bengali", sans-serif;
+  --font-latin: Poppins, "Hind Siliguri", system-ui, sans-serif;
+}
+
+/* Type styles */
+.display { font-family: var(--font-bn); font-size: 42px; line-height: 56px; font-weight: 700; }
+.heading-lg { font-family: var(--font-bn); font-size: 30px; line-height: 42px; font-weight: 700; }
+.heading-md { font-family: var(--font-bn); font-size: 22px; line-height: 32px; font-weight: 700; }
+.heading-sm { font-family: var(--font-bn); font-size: 18px; line-height: 28px; font-weight: 600; }
+.body { font-family: var(--font-bn-alt); font-size: 17px; line-height: 30px; font-weight: 400; }
+.body-sm { font-family: var(--font-bn-alt); font-size: 15px; line-height: 25px; font-weight: 400; }
+.nav { font-family: var(--font-bn-alt); font-size: 17px; line-height: 24px; font-weight: 600; }
+.tag { font-family: var(--font-bn-alt); font-size: 13px; line-height: 18px; font-weight: 600; }
+.wordmark { font-family: var(--font-latin); font-size: 20px; line-height: 24px; font-weight: 600; letter-spacing: 0.01em; }
+.meta { font-family: var(--font-latin); font-size: 13px; line-height: 20px; font-weight: 400; }
+.eyebrow { font-family: var(--font-latin); font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: 0.12em; }
