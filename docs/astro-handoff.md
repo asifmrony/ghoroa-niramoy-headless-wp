@@ -16,7 +16,7 @@ What the Astro side has to change, in one list. The detail is in the tables belo
 4. **Alias the lead image URL in the `Article` query:** `featuredImage { node { leadUrl: sourceUrl(size: GN_LEAD) … } }` (C14). As originally written, the query was invalid GraphQL and could never have run.
 5. Dates now carry `+06:00` (C4). If Astro added its own offset handling as a workaround, remove it.
 6. Copy the 6 stand-in `youtubeId`s from this repo's `docs/seed/sample-content.json` into the Astro seed source, so a re-export keeps them (S1).
-7. **Now unblocked:** run the end-to-end test against `WP_GRAPHQL_URL=http://localhost:8888/graphql` (B6). Later: the preview route (B8) and `shop-router` (B12).
+7. **Connect WordPress (B6):** the first slice is in. Actions 1–4 are already applied in `src/lib/wordpress.ts`. Remaining: `gnSeo` in `BaseLayout`, the options-page promo and chips, `srcset`, info pages. Later: the preview route (B8) and `shop-router` (B12).
 
 ---
 
@@ -76,7 +76,7 @@ WPGraphQL for ACF 3.0 (the current release) exposes some SCF field types differe
 | B3 | wp-env breaks on a Windows username with a space ("KHAN GADGET") | — | — | Resolved: `tools/wp-env.cjs`; run wp-env through the npm scripts |
 | B4 | Decisions D1–D3 | M3 | Both sides | Resolved 2026-10-11 |
 | B5 | A real `youtubeId` in the seed (S1) | §11 acceptance | Astro side or content owner | Resolved locally 2026-10-11 (stand-in IDs); real channel IDs before launch |
-| B6 | Astro task "Connect WordPress" (astro-todo §1) | The end-to-end contract test (`WP_GRAPHQL_URL=http://localhost:8888/graphql`) | Astro side | **Unblocked by M3**; waiting on the Astro side |
+| B6 | Astro task "Connect WordPress" (astro-todo §1) | The end-to-end contract test (`WP_GRAPHQL_URL=http://localhost:8888/graphql`) | Astro side | **First slice done 2026-10-11** (`src/lib/wordpress.ts`): every page type renders WordPress data, and the reference body is identical to the Astro file. Still open on the Astro side: `gnSeo` in `BaseLayout`, header promo and search chips, `srcset`, info pages, `gn_build` auth |
 | B7 | A real medical reviewer: name and registration number (§8) | Production roles. Locally M5 uses a test user | Content owner | Before launch |
 | B8 | Preview route `/preview/` on the Astro site plus a shared HMAC secret (§10.2) | End-to-end preview (M6). WordPress can generate links and tokens without it | Astro side | Should, before M6 is verified |
 | B9 | Workers Builds deploy hook URL (§10.1) | Production webhook only; locally the hook just logs | You (Cloudflare) | M7 |
