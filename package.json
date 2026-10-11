@@ -1,0 +1,21 @@
+{
+	"name": "ghoroa-niramoy-wordpress",
+	"private": true,
+	"description": "GhoroaNiramoy WordPress: headless CMS for the Astro site (see docs/wordpress-v1-requirements.md).",
+	"engines": {
+		"node": ">=22"
+	},
+	"scripts": {
+		"wp-env": "node tools/wp-env.cjs",
+		"env:start": "node tools/wp-env.cjs start",
+		"env:stop": "node tools/wp-env.cjs stop",
+		"env:destroy": "node tools/wp-env.cjs destroy",
+		"env:setup": "node tools/wp-env.cjs run cli wp gn setup",
+		"env:seed": "node tools/wp-env.cjs run cli wp gn seed docs/seed/sample-content.json",
+		"env:check":"node tools/wp-env.cjs run cli wp gn graphql-check",
+		"wp": "node tools/wp-env.cjs run cli wp"
+	},
+	"devDependencies": {
+		"@wordpress/env": "11.17.0"
+	}
+}

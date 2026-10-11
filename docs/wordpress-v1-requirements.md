@@ -172,7 +172,8 @@ The Astro side consumes the shapes below; its TypeScript types are reproduced so
 
 ### 4.1 Global rules
 - **Slugs are Latin.** Every post, video, tag and user slug is lowercase ASCII (`a-z 0-9 -`), transliterated from Bengali. Example: `thankuni-patar-upokarita`. Reject non-ASCII slugs on save (section 7).
-- **Dates** come back as ISO 8601 with the `+06:00` offset.
+- **Dates** come back as ISO 8601 with the `+06:00` offset. This applies to `date`, `modified` and `articleFields.contentUpdated`, e.g. `2026-10-02T08:00:00+06:00`. WPGraphQL's `dateGmt` and `modifiedGmt` are unchanged (UTC, no suffix).
+- **Plain text:** WPGraphQL returns `excerpt` and `caption` as HTML (`<p>…</p>`), and their `RAW` format is hidden from anonymous clients. Use `excerptText` (posts, videos) and `captionText` (media), which `ghoroa-core` adds as plain text.
 - **Images** expose `sourceUrl`, `altText` (required, Bengali), `mediaDetails { width height }` and a `srcSet`. Register these crops:
 
   | Name | Size | Used for |
@@ -241,7 +242,7 @@ Field mapping:
 |---|---|---|
 | `slug` | post slug | Latin; not reserved (section 7) |
 | `title` | post title | Bengali numerals inside Bengali headlines (১০টি, not 10টি); about 45 characters or fewer for hero candidates |
-| `excerpt` | post excerpt | **Required.** 1–2 sentences on what the reader will learn; used on cards |
+| `excerpt` | post excerpt, read as GraphQL `excerptText` (plain text) | **Required.** 1–2 sentences on what the reader will learn; used on cards |
 | `dek` | ACF `articleFields.dek` | **Required.** 1–2 sentences under the headline (may differ from the excerpt) |
 | `category` | primary category slug | Exactly one of the four |
 | `cardTag` | ACF `articleFields.cardTag` (single tag) | Optional card-label override |
@@ -250,7 +251,7 @@ Field mapping:
 | `date` | post date | |
 | `updated` | ACF `articleFields.contentUpdated` (date-time) | Set by hand for substantive updates only. **Not** `modified`, which changes on every save |
 | `readingMinutes` | computed GraphQL field `readingMinutes` | Word count of rendered content ÷ ~180 words per minute, rounded up, minimum 1. ACF `articleFields.readingMinutesOverride` wins when set |
-| `image`, `leadCaption` | featured image, and its caption | Featured image **required** to publish; alt text required |
+| `image`, `leadCaption` | featured image, and its caption (GraphQL `captionText`, plain text) | Featured image **required** to publish; alt text required |
 | `leadCredit` | ACF on attachment, `mediaFields.credit` | e.g. "Photo: GhoroaNiramoy" |
 | `isHealth` | ACF `articleFields.isHealth` (true/false) | Default **on** for ঘরোয়া টোটকা and ভেষজ উদ্ভিদ, **off** for ছাদবাগান; editable |
 | `medicallyReviewed` | ACF `articleFields.medicallyReviewed` | Only the `medical_reviewer` role may set it (section 8). Also store `articleFields.medicalReviewer` (user) and the review date; not shown in v1 but kept for the record |
@@ -273,13 +274,15 @@ interface Video {
 }
 ```
 
-- Register `video` as public in GraphQL (`graphql_single_name: video`, `graphql_plural_name: videos`). Supports title, excerpt (used as `description`), thumbnail and author.
+- Register `video` as public in GraphQL (`graphql_single_name: video`, `graphql_plural_name: videos`). Supports title, excerpt (used as `description`, read as GraphQL `excerptText`), thumbnail and author.
 - Not rendered by WordPress on the front end; it lives at `domain.com/video/<slug>/`.
 - ACF `videoFields`:
   - `youtubeId`: 11 characters, validated. A pasted YouTube URL is reduced to its ID.
   - `duration`: validated against `^\d{1,2}(:\d{2}){1,2}$`.
   - `relatedProducts`: relationship to WooCommerce products. **Later**; add the field now so it exists.
-- Featured image is optional. If it's empty, fall back to the YouTube thumbnail URL in the GraphQL resolver.
+- Featured image is optional. If it's empty, fall back to the YouTube thumbnail.
+  - **As built (M3):** when a video is saved, `ghoroa-core` downloads the thumbnail into the media library and sets it as the featured image. It tries `maxresdefault`, then `sddefault`, then `hqdefault`. The resolver isn't used, so `featuredImage` keeps its shape and gets the §4.1 crops, WebP and our uploads URL.
+  - An image an editor sets is never replaced. A downloaded thumbnail follows the YouTube ID: it's swapped when the ID changes and removed when the ID is cleared.
 
 ### 4.7 Homepage options (ACF options page `homepageOptions`)
 
@@ -305,9 +308,11 @@ The rest of the homepage is automatic on the Astro side, so WordPress needs no f
 
 ### 4.9 Reference queries (the Astro build will run these)
 
+`cardTag` and `homepageOptions` (including `hero`, `videoPicks` and `popularPicks`) are registered by `ghoroa-core` in exactly the shapes below. WPGraphQL for ACF would otherwise return connections (`{ nodes { … } }`) and nest the options under the field group. `excerptText`, `captionText` and the date offset are covered in §4.1. Decisions D1–D3 in [astro-handoff.md](astro-handoff.md) explain why.
+
 ```graphql
 fragment Summary on Post {
-  slug title excerpt date readingMinutes
+  slug title excerptText date readingMinutes
   categories(first: 1) { nodes { slug name } }
   tags { nodes { slug name } }
   author { node { slug name description } }
@@ -326,7 +331,7 @@ query Article($slug: ID!) {
   post(id: $slug, idType: SLUG) {
     ...Summary
     content
-    featuredImage { node { sourceUrl(size: GN_LEAD) caption altText mediaFields { credit } } }
+    featuredImage { node { leadUrl: sourceUrl(size: GN_LEAD) captionText altText mediaFields { credit } } }   # alias required: Summary already selects sourceUrl(size: GN_CARD)
     articleFields {
       dek isHealth medicallyReviewed contentUpdated
       toc { anchor label }
@@ -335,7 +340,7 @@ query Article($slug: ID!) {
   }
 }
 
-query Videos { videos(first: 100) { nodes { slug title date excerpt
+query Videos { videos(first: 100) { nodes { slug title date excerptText
   videoFields { youtubeId duration }
   featuredImage { node { sourceUrl(size: GN_CARD) altText } } } } }
 
@@ -551,6 +556,9 @@ The Astro build repeats the critical checks (caution callout, ad count) and fail
 
   Every field is nullable. Astro falls back to its own title, dek and featured image when a field is empty. This avoids depending on a stale third-party plugin, and the field shape stays the same if the SEO plugin ever changes.
 - In Rank Math, turn off: schema output, its redirections module (redirects live in `ghoroa-core`), breadcrumbs, the 404 monitor, and the post/page/category/tag/author sitemaps (see below).
+  - **As built (M3):** `wp gn setup` applies these. It also switches off the video sitemap, the HTML sitemap and **Instant Indexing**, which would otherwise ping search engines with WordPress URLs on publish.
+  - Rank Math free stays dormant until an account is connected or its wizard's "Skip" is clicked. Setup sets that skip flag (`rank_math_registration_skip`), so no Rank Math account is needed.
+  - With every content type off, `sitemap_index.xml` returns 404 until shop products exist.
 - **Structured data is generated by Astro** (Article, BreadcrumbList, HowTo, VideoObject). Turn off the plugin's JSON-LD for headless content so nothing is duplicated.
 - **Sitemaps:** Astro owns the content sitemap. The WordPress or SEO-plugin sitemap must list **only shop URLs** (products and product categories, later) and must never list posts, pages, categories, tags, authors or videos. Tell the Astro side its final URL (e.g. `/shop/sitemap_index.xml`) so it can go into `robots.txt`.
 - Astro serves the single `robots.txt` for the whole domain. WordPress must not try to serve one at the root.
