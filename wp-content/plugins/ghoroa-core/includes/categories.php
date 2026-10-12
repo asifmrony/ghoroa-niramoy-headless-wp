@@ -19,8 +19,8 @@ const GN_CATEGORIES_VERSION = '1';
  * Fixed categories in display order, keyed by slug.
  *
  * `is_health` is the default for articleFields.isHealth (§4.5): on for ঘরোয়া টোটকা and ভেষজ উদ্ভিদ,
- * off for ছাদবাগান. The spec doesn't name a default for রান্নাঘরের মসলা; it's on (the safer side,
- * since it triggers the health safeguards in §7) until decided otherwise.
+ * off for রান্নাঘরের মসলা and ছাদবাগান (রান্নাঘরের মসলা decided 2026-10-12, D4 in docs/astro-handoff.md).
+ * Editors can still switch it on for an individual article.
  *
  * @return array<string, array{name: string, description: string, is_health: bool}>
  */
@@ -39,7 +39,7 @@ function gn_categories(): array {
 		'rannaghorer-mosla' => array(
 			'name'        => 'রান্নাঘরের মসলা',
 			'description' => 'রোজকার মসলার পুষ্টিগুণ, রান্নায় ব্যবহার আর সুস্থতায় এদের সম্ভাব্য ভূমিকা।',
-			'is_health'   => true,
+			'is_health'   => false,
 		),
 		'chhadbagan'        => array(
 			'name'        => 'ছাদবাগান',

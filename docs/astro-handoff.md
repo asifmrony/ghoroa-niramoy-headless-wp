@@ -54,7 +54,8 @@ WPGraphQL for ACF 3.0 (the current release) exposes some SCF field types differe
 | S4 | Reference article body has a placeholder link: `<a href="#">সাহায্য করতে পারে</a>` | A dead link once the article is public. The link-rewrite filter (§6, M5) leaves `#` alone | Point it at a real article, or remove the link before launch | Open (before launch) |
 | S5 | Reference article placeholder facts (nutrition table, references) | Already flagged in §11 | Replace before anything goes public | Open (before launch) |
 | S6 | Only the reference article has a `dek` | Following §11, WordPress sets `dek` = `excerpt` for the other 23 | None | Info |
-| S7 | `readingMinutes` | WordPress keeps the seed value as `readingMinutesOverride` for the 23 placeholder-body posts. The reference article is **computed: 3 minutes** (453 words ÷ 180 per §4.5), while the seed says **7**. 7 implies about 70 words a minute | See D5. Update any Astro snapshot that pins `7` | Open (D5) |
+| S7 | `readingMinutes` | The seed value is imported as `readingMinutesOverride` for all 24 posts (D5), so WordPress returns exactly the seed's numbers. The reference article is 7 (its calculated value would be 3) | None | Resolved (D5) |
+| S9 | Seed posts in রান্নাঘরের মসলা with health topics (D4 follow-up) | `daruchini-rokte-shorkora` (blood sugar) and `lobongo-datbethay` (toothache) read like health articles, but now default to `isHealth: false`, so they need no caution callout | If they should be health articles, add `"isHealth": true` to those posts in the Astro seed and re-export | Open (content call) |
 | S8 | `toc[].id` in the seed | Imported into the WordPress field `anchor` (see C7) | None | Info |
 
 ## 3. Decisions needed
@@ -64,8 +65,8 @@ WPGraphQL for ACF 3.0 (the current release) exposes some SCF field types differe
 | D1 | Contract shapes C1–C3 | (a) WordPress returns the §4.9 shapes; (b) Astro adopts the WPGraphQL for ACF connection shapes | **Decided 2026-10-11: (a).** Implemented; the contract is unchanged | Done |
 | D2 | Date format (C4) | (a) WordPress returns `date` and `contentUpdated` with `+06:00`; (b) Astro reads `dateGmt` and formats it in Asia/Dhaka | **Decided 2026-10-11: (a).** Implemented for `date`, `modified` and `contentUpdated` | Done |
 | D3 | Plain-text `excerpt` and `caption` (C5, C6) | (a) WordPress adds plain-text fields; (b) WordPress makes the public `excerpt` plain text; (c) Astro strips the tags | **Decided 2026-10-11: (a).** New fields `excerptText` and `captionText`; the Astro queries switch to them | Done (Astro update pending) |
-| D5 | Reading speed for `readingMinutes` (S7) | (a) keep 180 words a minute (§4.5): the reference article shows 3 min; (b) a lower Bengali rate such as 100 (5 min) or 70 (7 min, matching the seed) | (a) until someone with real reading data says otherwise. It's one constant (`GN_WORDS_PER_MINUTE`), and editors can always set `readingMinutesOverride` | Any time; no other work waits on it |
-| D4 | `isHealth` default for রান্নাঘরের মসলা | The spec names defaults only for the other three categories | Currently **on** (the stricter choice). That's why the 5 seed posts in this category get a caution callout and need `healthClaimsReviewed` | Before M5 (publish checks) |
+| D5 | Reading speed for `readingMinutes` (S7) | (a) keep 180 words a minute; (b) a lower Bengali rate | **Decided 2026-10-12: (a).** Editors set `readingMinutesOverride` when the calculated time doesn't fit. The importer treats the seed's `readingMinutes` as that editorial value, so every seeded post, the reference article included (7), shows the seed's number | Done |
+| D4 | `isHealth` default for রান্নাঘরের মসলা | on or off | **Decided 2026-10-12: off.** The 5 seed posts in this category are no longer health articles: no caution callout, no `healthClaimsReviewed`. Editors can switch it on per article | Done |
 
 ## 4. Blockers and prerequisites
 
@@ -87,6 +88,11 @@ WPGraphQL for ACF 3.0 (the current release) exposes some SCF field types differe
 | B14 | WordPress's sitemap URL for Astro's `robots.txt` (§9) | Nothing in v1. It will be `/shop/sitemap_index.xml` (Rank Math); it returns 404 until shop products exist, because every content type is off | WordPress side tells the Astro side | Later |
 
 ## 5. Changelog
+
+- **2026-10-12 (D4, D5):**
+  - **D4:** রান্নাঘরের মসলা is no longer a health category by default.
+  - **D5:** the reading rate stays at 180 words a minute, and the seed's reading times are imported as editor overrides.
+  - **Opened:** S9.
 
 - **2026-10-11 (M3):**
   - **Added:** `readingMinutes` and `gnSeo`; the §4.1 crops (`GN_CARD` … `GN_OG`) as WebP; the YouTube thumbnail fallback; the Rank Math settings from §9.

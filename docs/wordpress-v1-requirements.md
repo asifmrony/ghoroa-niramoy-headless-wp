@@ -250,10 +250,10 @@ Field mapping:
 | `author` | post author | |
 | `date` | post date | |
 | `updated` | ACF `articleFields.contentUpdated` (date-time) | Set by hand for substantive updates only. **Not** `modified`, which changes on every save |
-| `readingMinutes` | computed GraphQL field `readingMinutes` | Word count of rendered content ÷ ~180 words per minute, rounded up, minimum 1. ACF `articleFields.readingMinutesOverride` wins when set |
+| `readingMinutes` | computed GraphQL field `readingMinutes` | Word count of rendered content ÷ 180 words per minute, rounded up, minimum 1 (rate confirmed 2026-10-12). ACF `articleFields.readingMinutesOverride` wins when set; editors are expected to set it when the calculated time doesn't fit the piece |
 | `image`, `leadCaption` | featured image, and its caption (GraphQL `captionText`, plain text) | Featured image **required** to publish; alt text required |
 | `leadCredit` | ACF on attachment, `mediaFields.credit` | e.g. "Photo: GhoroaNiramoy" |
-| `isHealth` | ACF `articleFields.isHealth` (true/false) | Default **on** for ঘরোয়া টোটকা and ভেষজ উদ্ভিদ, **off** for ছাদবাগান; editable |
+| `isHealth` | ACF `articleFields.isHealth` (true/false) | Default **on** for ঘরোয়া টোটকা and ভেষজ উদ্ভিদ, **off** for রান্নাঘরের মসলা and ছাদবাগান (রান্নাঘরের মসলা decided 2026-10-12); editable per article |
 | `medicallyReviewed` | ACF `articleFields.medicallyReviewed` | Only the `medical_reviewer` role may set it (section 8). Also store `articleFields.medicalReviewer` (user) and the review date; not shown in v1 but kept for the record |
 | — | ACF `articleFields.healthClaimsReviewed` (true/false) | Editors and admins only. Required before a health article can publish (section 7). Not exposed publicly |
 | — | ACF `articleFields.featured` (true/false) | From the architecture plan; candidate list for the hero picker |

@@ -300,8 +300,8 @@ class GN_Seeder {
 				),
 				$id
 			);
-			// Placeholder bodies are too short to count; keep the seed's reading time for them (§4.5).
-			update_field( 'reading_minutes_override', $has_body ? '' : (int) $p['readingMinutes'], $id );
+			// The seed's reading time is an editorial value: set it as the override (D5 in docs/astro-handoff.md).
+			update_field( 'reading_minutes_override', empty( $p['readingMinutes'] ) ? '' : (int) $p['readingMinutes'], $id );
 		}
 	}
 
