@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "gn/takeaways",
+	"title": "মূল কথা (Key takeaways)",
+	"description": "লেখার শুরুতে ঠিক ৩টি মূল কথা (§5.3)। প্রতি লেখায় একটি।",
+	"category": "text",
+	"icon": "lightbulb",
+	"keywords": [
+		"takeaways",
+		"summary",
+		"সারাংশ"
+	],
+	"textdomain": "ghoroa-core",
+	"supports": {
+		"multiple": false,
+		"html": false,
+		"align": false,
+		"alignWide": false,
+		"anchor": false,
+		"customClassName": false,
+		"className": false,
+		"reusable": false,
+		"lock": false,
+		"jsx": false,
+		"mode": true
+	},
+	"acf": {
+		"mode": "preview",
+		"renderTemplate": "render.php",
+		"blockVersion": 2
+	}
+}

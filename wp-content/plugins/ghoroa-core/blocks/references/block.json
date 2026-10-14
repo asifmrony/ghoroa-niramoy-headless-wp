@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "gn/references",
+	"title": "সূত্র",
+	"description": "তথ্যসূত্রের তালিকা (§5.9)। শুধু আসল সূত্রের লিংক দিন।",
+	"category": "text",
+	"icon": "book-alt",
+	"keywords": [
+		"references",
+		"sources",
+		"সূত্র"
+	],
+	"textdomain": "ghoroa-core",
+	"supports": {
+		"multiple": false,
+		"html": false,
+		"align": false,
+		"alignWide": false,
+		"anchor": false,
+		"customClassName": false,
+		"className": false,
+		"reusable": false,
+		"lock": false,
+		"jsx": false,
+		"mode": true
+	},
+	"acf": {
+		"mode": "preview",
+		"renderTemplate": "render.php",
+		"blockVersion": 2
+	}
+}

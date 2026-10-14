@@ -10,8 +10,8 @@
  *   post.leadCaption / leadCredit → featured image caption / mediaFields.credit
  *   video.description → excerpt                           author.bio → user description
  *
- * Only the reference article has a body. Until the §5 blocks exist (M4) every body is stored as
- * one core/html block, so it renders byte-for-byte; M4 switches this importer to real blocks.
+ * Only the reference article has a body; it's converted from its `.gn-prose` HTML into the §5 blocks
+ * (GN_Block_Converter). The other posts get a short placeholder body built from the same blocks.
  *
  * @package GhoroaCore
  */
@@ -249,8 +249,6 @@ class GN_Seeder {
 			}
 
 			$is_health = (bool) ( $p['isHealth'] ?? gn_category_is_health( $p['category'] ) );
-			$has_body  = ! empty( $p['contentHtml'] );
-			$content   = $has_body ? $p['contentHtml'] : $this->placeholder_body( $p['excerpt'], $is_health );
 
 			$id = $this->upsert(
 				'post',
@@ -258,7 +256,7 @@ class GN_Seeder {
 				array(
 					'post_title'    => $p['title'],
 					'post_excerpt'  => $p['excerpt'],
-					'post_content'  => $this->html_block( $content ),
+					'post_content'  => $this->body( $p, $is_health ),
 					'post_author'   => $author ?: get_current_user_id(),
 					'post_category' => array( $category->term_id ),
 				) + $this->dates( $p['date'] )
@@ -424,28 +422,39 @@ class GN_Seeder {
 	}
 
 	/**
-	 * Wraps HTML in a core/html block: it renders unchanged and skips wpautop/wptexturize.
+	 * Article body as blocks: the seed's `.gn-prose` HTML converted (§5), or a placeholder.
 	 */
-	private function html_block( string $html ): string {
-		return "<!-- wp:html -->\n" . trim( $html ) . "\n<!-- /wp:html -->";
+	private function body( array $p, bool $is_health ): string {
+		if ( empty( $p['contentHtml'] ) ) {
+			return $this->placeholder_body( $p['excerpt'], $is_health );
+		}
+		try {
+			return GN_Block_Converter::convert( $p['contentHtml'] );
+		} catch ( RuntimeException $e ) {
+			WP_CLI::error( "Post {$p['slug']}: can't convert its body to blocks: {$e->getMessage()}" );
+		}
 	}
 
 	/**
-	 * Short body for summary-level posts (§11). Health posts get the §5.8 caution callout so they
-	 * pass the §7 checks. No cure claims: "সাহায্য করতে পারে" only.
+	 * Short body for summary-level posts (§11), in blocks. Health posts get the §5.8 caution callout
+	 * so they pass the §7 checks. No cure claims: "সাহায্য করতে পারে" only.
 	 */
 	private function placeholder_body( string $excerpt, bool $is_health ): string {
-		$html = '<p>' . esc_html( $excerpt ) . '</p>'
-			. '<h2 id="s1">বিস্তারিত</h2>'
-			. '<p>এটি পরীক্ষার জন্য রাখা নমুনা লেখা। পূর্ণ লেখা পরে যোগ করা হবে।</p>';
-
+		$blocks = array(
+			GN_Block_Markup::paragraph( esc_html( $excerpt ) ),
+			GN_Block_Markup::heading( 2, 'বিস্তারিত', 's1' ),
+			GN_Block_Markup::paragraph( 'এটি পরীক্ষার জন্য রাখা নমুনা লেখা। পূর্ণ লেখা পরে যোগ করা হবে।' ),
+		);
 		if ( $is_health ) {
-			$html .= '<div class="gn-callout gn-callout--caution"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg>'
-				. '<div><span class="gn-callout__title">কারা এড়িয়ে চলবেন</span><ul>'
-				. '<li>গর্ভবতী ও স্তন্যদানকারী মায়েরা</li>'
-				. '<li>যাঁরা নিয়মিত ওষুধ খান</li>'
-				. '</ul>নিয়মিত ব্যবহারের আগে চিকিৎসকের সঙ্গে কথা বলুন।</div></div>';
+			$blocks[] = GN_Block_Markup::acf(
+				'callout-caution',
+				array(
+					'title'   => 'কারা এড়িয়ে চলবেন',
+					'items'   => array( array( 'text' => 'গর্ভবতী ও স্তন্যদানকারী মায়েরা' ), array( 'text' => 'যাঁরা নিয়মিত ওষুধ খান' ) ),
+					'closing' => 'নিয়মিত ব্যবহারের আগে চিকিৎসকের সঙ্গে কথা বলুন।',
+				)
+			);
 		}
-		return $html;
+		return implode( "\n\n", $blocks );
 	}
 }

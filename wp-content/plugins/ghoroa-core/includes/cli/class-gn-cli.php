@@ -110,6 +110,61 @@ class GN_CLI {
 	}
 
 	/**
+	 * §5 acceptance: the article's GraphQL `content` matches the reference HTML structurally
+	 * (elements, classes, ids, links, comments and text; whitespace ignored).
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--file=<file>]
+	 * : Reference HTML, relative to the WordPress root.
+	 * ---
+	 * default: docs/reference/thankuni-patar-upokarita.html
+	 * ---
+	 *
+	 * [--slug=<slug>]
+	 * : Post to compare.
+	 * ---
+	 * default: thankuni-patar-upokarita
+	 * ---
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp gn check-reference
+	 *
+	 * @subcommand check-reference
+	 *
+	 * @param string[] $args       Positional arguments.
+	 * @param string[] $assoc_args Options.
+	 */
+	public function check_reference( array $args, array $assoc_args ): void {
+		$diff = $this->reference_difference( $assoc_args['file'], $assoc_args['slug'] );
+		if ( null !== $diff ) {
+			WP_CLI::error( "{$assoc_args['slug']} differs from {$assoc_args['file']}:\n{$diff}" );
+		}
+		WP_CLI::success( "{$assoc_args['slug']} matches {$assoc_args['file']} structurally." );
+	}
+
+	/**
+	 * Null when the post's public GraphQL content matches the reference file, else what differs.
+	 */
+	private function reference_difference( string $file, string $slug ): ?string {
+		if ( ! is_readable( $file ) ) {
+			return "can't read {$file}";
+		}
+		$user = get_current_user_id();
+		wp_set_current_user( 0 );
+		$result = graphql(
+			array(
+				'query'     => 'query ($slug: ID!) { post(id: $slug, idType: SLUG) { content } }',
+				'variables' => array( 'slug' => $slug ),
+			)
+		);
+		wp_set_current_user( $user );
+		$content = $result['data']['post']['content'] ?? null;
+		return null === $content ? "post {$slug} not found or not public" : gn_html_difference( $content, (string) file_get_contents( $file ) );
+	}
+
+	/**
 	 * Day-one check (spec §3, "Plugin set"): every SCF field type we use resolves in WPGraphQL.
 	 *
 	 * Creates throwaway content, writes a value into each field, reads it back through an anonymous
@@ -234,6 +289,17 @@ class GN_CLI {
 			$expect( 'plain text (D3)', 'mediaItem.captionText', $d['mediaItem']['captionText'] ?? null, 'চেক ক্যাপশন' );
 			$expect( 'number', 'post.articleFields.readingMinutesOverride', $a['readingMinutesOverride'] ?? null, 7.0 );
 			$expect( 'taxonomy (D1)', 'post.articleFields.cardTag.slug', $a['cardTag']['slug'] ?? null, 'gn-check-tag' );
+
+			// M4: blocks (§5).
+			$registered = array_filter( GN_BLOCKS, static fn( $slug ) => WP_Block_Type_Registry::get_instance()->is_registered( "gn/{$slug}" ) );
+			$expect( 'blocks', 'gn/* blocks registered', count( $registered ), count( GN_BLOCKS ) );
+			$allowed = apply_filters( 'allowed_block_types_all', true, new WP_Block_Editor_Context( array( 'post' => get_post( $post ) ) ) );
+			$expect( 'blocks', 'allowlist excludes core/html, core/columns', is_array( $allowed ) && ! array_intersect( array( 'core/html', 'core/columns' ), $allowed ), true );
+			if ( get_page_by_path( 'thankuni-patar-upokarita', OBJECT, 'post' ) && is_readable( 'docs/reference/thankuni-patar-upokarita.html' ) ) {
+				$diff = $this->reference_difference( 'docs/reference/thankuni-patar-upokarita.html', 'thankuni-patar-upokarita' );
+				$expect( 'blocks', 'reference article = docs/reference (DOM)', $diff ?? 'identical', 'identical' );
+				wp_set_current_user( 0 );
+			}
 
 			// M3: reading time, SEO, images, Rank Math settings (§4.1, §4.5, §9).
 			$seo = $d['post']['gnSeo'] ?? array();

@@ -16,7 +16,7 @@ What the Astro side has to change, in one list. The detail is in the tables belo
 4. **Alias the lead image URL in the `Article` query:** `featuredImage { node { leadUrl: sourceUrl(size: GN_LEAD) … } }` (C14). As originally written, the query was invalid GraphQL and could never have run.
 5. Dates now carry `+06:00` (C4). If Astro added its own offset handling as a workaround, remove it.
 6. Copy the 6 stand-in `youtubeId`s from this repo's `docs/seed/sample-content.json` into the Astro seed source, so a re-export keeps them (S1).
-7. **Connect WordPress (B6):** the first slice is in. Actions 1–4 are already applied in `src/lib/wordpress.ts`. Remaining: `gnSeo` in `BaseLayout`, the options-page promo and chips, `srcset`, info pages. Later: the preview route (B8) and `shop-router` (B12).
+7. **Connect WordPress (B6):** the first slice is in. Actions 1–4 are already applied in `src/lib/wordpress.ts`. The homepage options, including the header promo and search chips, are fully wired (2026-10-12). Remaining: `gnSeo` in `BaseLayout`, `srcset`, info pages. Later: the preview route (B8) and `shop-router` (B12).
 
 ---
 
@@ -55,6 +55,7 @@ WPGraphQL for ACF 3.0 (the current release) exposes some SCF field types differe
 | S5 | Reference article placeholder facts (nutrition table, references) | Already flagged in §11 | Replace before anything goes public | Open (before launch) |
 | S6 | Only the reference article has a `dek` | Following §11, WordPress sets `dek` = `excerpt` for the other 23 | None | Info |
 | S7 | `readingMinutes` | The seed value is imported as `readingMinutesOverride` for all 24 posts (D5), so WordPress returns exactly the seed's numbers. The reference article is 7 (its calculated value would be 3) | None | Resolved (D5) |
+| S10 | Reference article vs §5 | §11 says the reference article "must use every block in §5", but it has **no inline figure** (§5.10). The figure block is built and tested separately, but the end-to-end check doesn't cover it. Its callout icons also lack the spec's `aria-hidden="true"`. WordPress outputs it, and the DOM comparison ignores that attribute | Optional: add a `<figure class="gn-figure">` to the reference article in the Astro repo, and `aria-hidden="true"` to its two icons | Open (low) |
 | S9 | Seed posts in রান্নাঘরের মসলা with health topics (D4 follow-up) | `daruchini-rokte-shorkora` (blood sugar) and `lobongo-datbethay` (toothache) read like health articles, but now default to `isHealth: false`, so they need no caution callout | If they should be health articles, add `"isHealth": true` to those posts in the Astro seed and re-export | Open (content call) |
 | S8 | `toc[].id` in the seed | Imported into the WordPress field `anchor` (see C7) | None | Info |
 
@@ -72,12 +73,12 @@ WPGraphQL for ACF 3.0 (the current release) exposes some SCF field types differe
 
 | # | Item | Blocks | Owner | Status |
 |---|---|---|---|---|
-| B1 | **Free space on drive F:** (about 30 MB left). `npm install` fails with `ENOSPC`, so wp-env runs from the npx cache on C:. Uploads and the database live on C: (`~/.wp-env`), so seeding works | Nothing right now. Needed if any milestone adds npm build tooling (e.g. a custom block that needs a JS build in M4), and for a local `node_modules` | You | Open (workaround in place) |
+| B1 | **Resolved 2026-10-13: F: now has about 5 GB free.** Previously about 30 MB was left. `npm install` fails with `ENOSPC`, so wp-env runs from the npx cache on C:. Uploads and the database live on C: (`~/.wp-env`), so seeding works | Nothing right now. Needed if any milestone adds npm build tooling (e.g. a custom block that needs a JS build in M4), and for a local `node_modules` | You | Resolved |
 | B2 | Docker DNS is intermittent during image builds (`auth.docker.io` / `dl-cdn.alpinelinux.org` "transient error") | Only the first `wp-env start` and rebuilds; a retry fixed it | You (Docker or network) | Watch |
 | B3 | wp-env breaks on a Windows username with a space ("KHAN GADGET") | — | — | Resolved: `tools/wp-env.cjs`; run wp-env through the npm scripts |
 | B4 | Decisions D1–D3 | M3 | Both sides | Resolved 2026-10-11 |
 | B5 | A real `youtubeId` in the seed (S1) | §11 acceptance | Astro side or content owner | Resolved locally 2026-10-11 (stand-in IDs); real channel IDs before launch |
-| B6 | Astro task "Connect WordPress" (astro-todo §1) | The end-to-end contract test (`WP_GRAPHQL_URL=http://localhost:8888/graphql`) | Astro side | **First slice done 2026-10-11** (`src/lib/wordpress.ts`): every page type renders WordPress data, and the reference body is identical to the Astro file. Still open on the Astro side: `gnSeo` in `BaseLayout`, header promo and search chips, `srcset`, info pages, `gn_build` auth |
+| B6 | Astro task "Connect WordPress" (astro-todo §1) | The end-to-end contract test (`WP_GRAPHQL_URL=http://localhost:8888/graphql`) | Astro side | **First slice done 2026-10-11** (`src/lib/wordpress.ts`): every page type renders WordPress data, and the reference body is identical to the Astro file. Header promo and search chips added 2026-10-12. Still open on the Astro side: `gnSeo` in `BaseLayout`, `srcset`, info pages, `gn_build` auth |
 | B7 | A real medical reviewer: name and registration number (§8) | Production roles. Locally M5 uses a test user | Content owner | Before launch |
 | B8 | Preview route `/preview/` on the Astro site plus a shared HMAC secret (§10.2) | End-to-end preview (M6). WordPress can generate links and tokens without it | Astro side | Should, before M6 is verified |
 | B9 | Workers Builds deploy hook URL (§10.1) | Production webhook only; locally the hook just logs | You (Cloudflare) | M7 |
@@ -88,6 +89,12 @@ WPGraphQL for ACF 3.0 (the current release) exposes some SCF field types differe
 | B14 | WordPress's sitemap URL for Astro's `robots.txt` (§9) | Nothing in v1. It will be `/shop/sitemap_index.xml` (Rank Math); it returns 404 until shop products exist, because every content type is off | WordPress side tells the Astro side | Later |
 
 ## 5. Changelog
+
+- **2026-10-13 (M4):**
+  - **Blocks:** the reference article is rebuilt from the §5 editor blocks; its GraphQL `content` matches `docs/reference/thankuni-patar-upokarita.html` structurally (`wp gn check-reference`).
+  - **No contract change:** the Astro side needs no change; the same markup arrives through real blocks.
+  - **Opened:** S10.
+  - **Closed:** B1 (disk space).
 
 - **2026-10-12 (D4, D5):**
   - **D4:** রান্নাঘরের মসলা is no longer a health category by default.

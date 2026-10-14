@@ -365,6 +365,13 @@ Astro drops `content` straight into `<article class="gn-prose">`. The design CSS
 
 **Approach (decided).** Build the custom blocks as **ACF Blocks via Secure Custom Fields** (free): `block.json` plus a PHP `render_template`. Fall back to a native block with server-side `render_callback` only for a block that ACF Blocks can't produce. Either way the saved and rendered output must not add wrapper `<div>`s, `wp-block-*` classes on these custom blocks, inline styles or WordPress block CSS.
 
+**As built (M4, 2026-10-13):**
+- **Custom blocks:** the seven `gn/*` blocks are ACF blocks in `ghoroa-core/blocks/<slug>/`.
+- **Core blocks:** heading, paragraph, list, quote, table and image keep core editing; only their rendered output is rewritten to the markup below.
+- **Table:** §5.5 is the **core table block** (decision M4-a). A column gets `class="num"` when every filled body cell is a Latin-numeral quantity (e.g. `≈ 48 mg`). Editors can override this with the column's alignment: right means numeric, left means not.
+- **Numbering:** H2 ids and the numbered-heading numbers and ids are written into the content on every save, so they always follow the current order.
+- **Acceptance:** `wp gn check-reference` is the DOM comparison.
+
 **Block allowlist** (`allowed_block_types_all` for posts and pages): core paragraph, heading (H2 and H3 only), list, quote (mapped to the pull quote), image, table (mapped to the table block below), plus the custom blocks here. Disable columns, buttons, cover, gallery, embeds, HTML, separators, spacers, colours, font sizes and alignment options.
 
 ### 5.1 Section heading (core heading, H2)
