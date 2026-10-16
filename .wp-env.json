@@ -16,6 +16,7 @@
 	},
 	"config": {
 		"GN_PUBLIC_URL": "http://localhost:4321",
+		"GN_PREVIEW_SECRET": "local-dev-preview-secret-not-for-production",
 		"DISALLOW_FILE_EDIT": true,
 		"WP_DEBUG_LOG": true,
 		"WP_DEBUG_DISPLAY": false

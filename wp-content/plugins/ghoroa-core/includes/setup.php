@@ -22,6 +22,9 @@ function gn_apply_site_settings(): array {
 		'date_format'     => 'j F Y',
 		'time_format'     => 'g:i a',
 		'start_of_week'   => 6,
+		// Comments and pings off (§3); hardening.php also closes them in code.
+		'default_comment_status' => 'closed',
+		'default_ping_status'    => 'closed',
 	);
 	foreach ( $settings as $option => $value ) {
 		if ( (string) get_option( $option ) !== (string) $value ) {
@@ -46,7 +49,7 @@ function gn_apply_site_settings(): array {
 		}
 	}
 
-	return array_merge( $log, gn_configure_rank_math(), gn_ensure_categories() );
+	return array_merge( $log, gn_configure_rank_math(), gn_ensure_categories(), gn_ensure_roles() );
 }
 
 register_activation_hook(

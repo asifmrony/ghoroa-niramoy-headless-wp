@@ -505,6 +505,15 @@ All internal URLs end in `/`.
 - **301-redirect** any front-end request WordPress would render for these items to the Astro URL. This covers a single post, page, video, category, tag, author, date archive, attachment page or front-end search under `/shop/…`. Shop, cart, checkout, account, `wp-admin`, `wp-login.php`, `wp-json` and `graphql` are untouched.
 - Disable feeds (or 301 them to Astro once it publishes RSS), and disable the WordPress core sitemaps for posts, pages, users and taxonomies (see section 9).
 
+**As built (M5, 2026-10-14):** `includes/links.php` and `includes/redirects.php`.
+- **GraphQL `link` and `uri`:** both are the absolute public URL (e.g. `https://domain.com/kalojira/`).
+- **Date archives:** 301 to `/latest/`.
+- **Feeds:** return 404.
+- **WordPress core sitemaps:** off.
+- **The WordPress front page:** 301s to the Astro home until the shop exists.
+- **Previews:** not redirected (§10.2, M6).
+- **The editor's slug field:** still works, through the `%postname%` sample permalink.
+
 **Acceptance:**
 - No public `/shop/<article-slug>` URL returns 200; each 301s to `domain.com/<slug>/`.
 - GraphQL `uri` and the SEO canonical for a post equal its Astro URL.
@@ -532,6 +541,18 @@ Implement these as checks on the transition to `publish` (and `future`). They mu
 
 The Astro build repeats the critical checks (caution callout, ad count) and fails if they're violated, so WordPress is the first line of defence and Astro is the backstop.
 
+**As built (M5, 2026-10-14):** one rule set, `gn_publish_problems()` in `includes/publish-checks/`, enforced in four places:
+- **Block editor (REST):** a refused publish or update shows the Bengali message as an error notice. The SCF field values travel with each save as `gn_acf`.
+- **Pre-publish panel:** "প্রকাশের আগে যাচাই" lists the errors and the warnings.
+- **Classic saves, Quick Edit and WP-CLI:** the post is saved as a draft instead, with the reason shown.
+- **Tags and users:** Latin slugs are enforced.
+
+Other details:
+- **Info pages:** the five §4.8 slugs are allowed for pages.
+- **H2 ids:** fixed automatically on save (§5).
+- **Cure-claim list:** editable under Posts → নিরাময়-দাবির শব্দ.
+- **Bengali slugs:** blocked, not transliterated (decided 2026-10-14).
+
 ---
 
 ## 8. Roles and capabilities — Must
@@ -545,6 +566,19 @@ The Astro build repeats the critical checks (caution callout, ad count) and fail
 | **Medical reviewer** (new, `medical_reviewer`) | Read and comment on posts in review; the only role that can set `medicallyReviewed` and `medicalReviewer`. The reviewer must be a registered practitioner, recorded on their user profile (name and registration number) |
 | Build bot (new, `gn_build`) | Read-only access to drafts for the preview server via an Application Password; no admin UI |
 | Shop manager | Later (WooCommerce default) |
+
+**As built (M5, 2026-10-14):** `includes/roles.php`, `includes/two-factor.php`.
+- **Authors and health articles:** an author's publish of a health article is saved as Pending. Editors and admins hold `gn_publish_health` and `gn_review_health_claims`.
+- **Medical reviewer:**
+  - Opens posts in review and comments through the block editor's **Notes**; public comments are off site-wide (§3).
+  - Can't change the text: any change they save is discarded.
+  - Holds `gn_medical_review`, the only right that can set `medicallyReviewed`, the reviewer and the review date. Ticking it records the reviewer and the date.
+  - Their profile has a practitioner name and a registration number.
+- **Protected fields:** shown read-only to everyone else, and enforced on save.
+- **`gn_build`:** reads drafts and pending posts through GraphQL, has no edit rights and no admin screens.
+- **2FA:**
+  - Authenticator app (TOTP) and backup codes only; no email codes.
+  - Required for admins and editors when `GN_REQUIRE_2FA` is true. Set it in the production `wp-config.php` (M7); local development leaves it unset.
 
 ---
 
@@ -587,10 +621,29 @@ The Astro build repeats the critical checks (caution callout, ad count) and fail
 - Retry with backoff, and log the last 50 deliveries (event, post, time, HTTP status) in an admin screen.
 - Settings (hook URL, on/off) live in `wp-config.php` constants (`GN_BUILD_HOOK_URL`), not in plain options. Never hard-code them.
 
+**As built (M6, 2026-10-16):** `ghoroa-core/includes/webhook/`.
+- **Queue:** every trigger above queues a change. One WP-Cron event sends them as a single call, 10 seconds after the first change (the block editor saves the post and its meta boxes in two requests) but never sooner than 60 seconds after the previous call.
+- **Production timing:** with the system cron running every minute (§3.2), a publish starts a build within about a minute.
+- **Retries and log:** retries after 1, 5 and 15 minutes. The log is under **Tools → Rebuild log**, which also has "Rebuild now" for admins (or `wp gn rebuild`).
+- **Hook URL:** it never leaves `wp-config.php`; screens show it masked.
+- **Ignored:** draft saves, and images no published content uses, trigger nothing.
+- **Local testing:** a fake hook at `/wp-json/gn/v1/mock-build-hook` (local environment only).
+
 ### 10.2 Preview — Should
 - Rewrite the editor's Preview button to `https://domain.com/preview/?type=post&id=<id>&token=<t>`.
 - `token` is an HMAC of `id` plus an expiry 10 minutes ahead, using a secret shared with the Astro preview route.
 - The Astro preview route (to be built on the Astro side) runs as an on-demand route in the site Worker, like the form endpoints; every other page stays static. It queries drafts with the `gn_build` Application Password.
+
+**As built (M6, 2026-10-16):**
+- **Token:** `<expires>.<hex HMAC-SHA256 of "<id>.<expires>">`, with `GN_PREVIEW_SECRET` (`includes/preview.php`). The link also carries `type`.
+- **Build bot login:** `wp gn build-user` creates the `gn_build` user and prints its Application Password once.
+- **Astro route:** `src/pages/preview/index.astro` in the Astro repo. It:
+  - verifies the token with Web Crypto;
+  - reads the draft, or a published post's autosave, with `asPreview: true`;
+  - renders the article layout with `noindex` and `Cache-Control: private, no-store`.
+
+  Articles only for now; other types answer 400.
+- **Astro Worker secrets:** `PREVIEW_SECRET` (equal to `GN_PREVIEW_SECRET`), `WP_BUILD_USER`, `WP_BUILD_APP_PASSWORD`.
 
 ---
 

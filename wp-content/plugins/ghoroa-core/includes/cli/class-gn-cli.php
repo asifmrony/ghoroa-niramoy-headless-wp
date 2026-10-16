@@ -110,6 +110,68 @@ class GN_CLI {
 	}
 
 	/**
+	 * Creates the gn_build user (§8) and a new Application Password for the Astro build and preview.
+	 *
+	 * The password is printed once; store it as a Worker secret (WP_BUILD_APP_PASSWORD) together with
+	 * the user name (WP_BUILD_USER). Running it again revokes the previous Astro password.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp gn build-user
+	 *
+	 * @subcommand build-user
+	 */
+	public function build_user(): void {
+		$user = get_user_by( 'login', 'gn-build' );
+		if ( ! $user ) {
+			$id = wp_insert_user(
+				array(
+					'user_login'   => 'gn-build',
+					'user_pass'    => wp_generate_password( 40 ),
+					'user_email'   => 'gn-build@example.invalid',
+					'display_name' => 'Astro build',
+					'role'         => 'gn_build',
+				)
+			);
+			if ( is_wp_error( $id ) ) {
+				WP_CLI::error( $id->get_error_message() );
+			}
+			$user = get_userdata( $id );
+			WP_CLI::log( 'Created user gn-build (role gn_build).' );
+		}
+		if ( ! wp_is_application_passwords_available_for_user( $user ) ) {
+			WP_CLI::error( 'Application Passwords are unavailable here (they need HTTPS outside local development).' );
+		}
+		foreach ( WP_Application_Passwords::get_user_application_passwords( $user->ID ) as $item ) {
+			if ( 'Astro build' === $item['name'] ) {
+				WP_Application_Passwords::delete_application_password( $user->ID, $item['uuid'] );
+				WP_CLI::log( 'Revoked the previous Astro build password.' );
+			}
+		}
+		$created = WP_Application_Passwords::create_new_application_password( $user->ID, array( 'name' => 'Astro build' ) );
+		if ( is_wp_error( $created ) ) {
+			WP_CLI::error( $created->get_error_message() );
+		}
+		WP_CLI::log( "WP_BUILD_USER=gn-build\nWP_BUILD_APP_PASSWORD={$created[0]}" );
+		WP_CLI::success( 'Store these as Astro/Worker secrets now; the password is not shown again.' );
+	}
+
+	/**
+	 * Sends a rebuild now, with whatever is queued (§10.1).
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp gn rebuild
+	 */
+	public function rebuild(): void {
+		gn_queue_rebuild( 'manual', 'wp-cli' );
+		wp_clear_scheduled_hook( 'gn_rebuild_dispatch' );
+		gn_rebuild_dispatch();
+		$last = ( (array) get_option( 'gn_rebuild_log', array() ) )[0] ?? null;
+		WP_CLI::success( 'Rebuild: ' . ( $last['result'] ?? 'nothing sent' ) );
+	}
+
+	/**
 	 * §5 acceptance: the article's GraphQL `content` matches the reference HTML structurally
 	 * (elements, classes, ids, links, comments and text; whitespace ignored).
 	 *
@@ -187,6 +249,10 @@ class GN_CLI {
 		}
 
 		try {
+			// Fixtures are published before their fields exist, like the seed importer's posts, and are
+			// throwaway content that must not trigger a site rebuild.
+			$GLOBALS['gn_suspend_publish_checks'] = true;
+			$GLOBALS['gn_suspend_rebuild']        = true;
 			$tag    = wp_insert_term( 'gn-check-tag', 'post_tag', array( 'slug' => 'gn-check-tag' ) );
 			$tag_id = is_wp_error( $tag ) ? (int) get_term_by( 'slug', 'gn-check-tag', 'post_tag' )->term_id : (int) $tag['term_id'];
 
@@ -239,6 +305,8 @@ class GN_CLI {
 			update_post_meta( $post, 'rank_math_robots', array( 'noindex', 'nofollow' ) );
 			update_post_meta( $post, 'rank_math_facebook_image', 'https://example.invalid/og.jpg' );
 
+			$GLOBALS['gn_suspend_publish_checks'] = false;
+
 			// Read back as an anonymous visitor, the way the Astro build sees published content.
 			wp_set_current_user( 0 );
 			$result = graphql(
@@ -289,6 +357,59 @@ class GN_CLI {
 			$expect( 'plain text (D3)', 'mediaItem.captionText', $d['mediaItem']['captionText'] ?? null, 'চেক ক্যাপশন' );
 			$expect( 'number', 'post.articleFields.readingMinutesOverride', $a['readingMinutesOverride'] ?? null, 7.0 );
 			$expect( 'taxonomy (D1)', 'post.articleFields.cardTag.slug', $a['cardTag']['slug'] ?? null, 'gn-check-tag' );
+
+			// M5: links and redirects (§6), publish checks (§7), roles (§8), hardening (§3).
+			$expect( 'links', 'post permalink = Astro URL', get_permalink( $post ), gn_public_url() . '/gn-check-post/' );
+			$expect( 'links', 'tag link = Astro URL', get_term_link( $tag_id, 'post_tag' ), gn_public_url() . '/tag/gn-check-tag/' );
+			$check_problems = gn_publish_problems( gn_publish_state( get_post( $post ) ) );
+			$expect( 'publish checks', 'incomplete post is blocked', array_column( $check_problems['errors'], 'code' ), array( 'image_missing', 'caution_missing' ) );
+			$bengali = gn_publish_problems( array( 'slug' => '', 'title' => 'থানকুনি' ) + gn_publish_state( get_post( $post ) ) );
+			$expect( 'publish checks', 'Bengali slug is blocked', in_array( 'slug_latin', array_column( $bengali['errors'], 'code' ), true ), true );
+			$reference = get_page_by_path( 'thankuni-patar-upokarita', OBJECT, 'post' );
+			if ( $reference ) {
+				$expect( 'publish checks', 'reference article passes', gn_publish_problems( gn_publish_state( $reference ) )['errors'], array() );
+			}
+			$expect( 'roles', 'medical_reviewer and gn_build exist', (bool) ( get_role( 'medical_reviewer' ) && get_role( 'gn_build' ) ), true );
+			$expect( 'roles', 'editor may publish health, author may not', array( (bool) get_role( 'editor' )->has_cap( 'gn_publish_health' ), (bool) get_role( 'author' )->has_cap( 'gn_publish_health' ) ), array( true, false ) );
+			$expect( 'hardening', 'comments closed, XML-RPC off, core sitemaps off', array( comments_open( $post ), apply_filters( 'xmlrpc_enabled', true ), wp_sitemaps_get_server()->sitemaps_enabled() ), array( false, false, false ) );
+
+			// M6: rebuild webhook and preview (§10). The hook call is intercepted; nothing leaves WordPress.
+			$saved = array();
+			foreach ( array( 'gn_rebuild_queue', 'gn_rebuild_log', 'gn_rebuild_last_call' ) as $option ) {
+				$saved[ $option ] = get_option( $option, null );
+				delete_option( $option );
+			}
+			$scheduled = wp_next_scheduled( 'gn_rebuild_dispatch' );
+			wp_clear_scheduled_hook( 'gn_rebuild_dispatch' );
+			$calls    = 0;
+			$url      = static fn() => 'https://hook.invalid/gn-check';
+			$intercept = static function ( $pre, $args, $request_url ) use ( &$calls ) {
+				if ( 'https://hook.invalid/gn-check' !== $request_url ) {
+					return $pre;
+				}
+				++$calls;
+				return array( 'headers' => array(), 'body' => '', 'response' => array( 'code' => 200, 'message' => 'OK' ), 'cookies' => array(), 'filename' => null );
+			};
+			add_filter( 'gn/build_hook_url', $url );
+			add_filter( 'pre_http_request', $intercept, 10, 3 );
+			$GLOBALS['gn_suspend_rebuild'] = false;
+			wp_update_post( array( 'ID' => $post ) ); // Block editor "Update": the post…
+			wp_update_post( array( 'ID' => $post ) ); // …then its meta boxes.
+			$queued = count( (array) get_option( 'gn_rebuild_queue', array() ) );
+			gn_rebuild_dispatch();
+			$GLOBALS['gn_suspend_rebuild'] = true;
+			$expect( 'webhook', 'editor save → one queued change → one hook call', array( $queued, $calls ), array( 1, 1 ) );
+			remove_filter( 'gn/build_hook_url', $url );
+			remove_filter( 'pre_http_request', $intercept, 10 );
+			foreach ( $saved as $option => $value ) {
+				null === $value ? delete_option( $option ) : update_option( $option, $value, false );
+			}
+			if ( $scheduled ) {
+				wp_schedule_single_event( $scheduled, 'gn_rebuild_dispatch' );
+			}
+			$preview = get_preview_post_link( $post );
+			parse_str( (string) wp_parse_url( $preview, PHP_URL_QUERY ), $query );
+			$expect( 'preview', 'Preview button → Astro /preview/ with a valid token', array( str_starts_with( $preview, gn_public_url() . '/preview/?' ), gn_verify_preview_token( $post, (string) ( $query['token'] ?? '' ) ) ), array( true, true ) );
 
 			// M4: blocks (§5).
 			$registered = array_filter( GN_BLOCKS, static fn( $slug ) => WP_Block_Type_Registry::get_instance()->is_registered( "gn/{$slug}" ) );
@@ -363,7 +484,9 @@ class GN_CLI {
 			$failed = count( array_filter( $rows, static fn( $r ) => 'PASS' !== $r['result'] ) );
 			$total  = count( $rows );
 		} finally {
+			$GLOBALS['gn_suspend_publish_checks'] = false;
 			foreach ( $created as $id ) {
+				// Still suspended: deleting the fixtures queues nothing.
 				wp_delete_post( $id, true );
 			}
 			if ( $tag_id ) {
@@ -380,6 +503,7 @@ class GN_CLI {
 				require_once ABSPATH . 'wp-admin/includes/user.php';
 				wp_delete_user( $GLOBALS['gn_check_editor'] );
 			}
+			$GLOBALS['gn_suspend_rebuild'] = false;
 		}
 
 		// After cleanup: WP_CLI::error() exits, which would skip the finally block.

@@ -47,6 +47,34 @@ class GN_Seeder {
 	 * Runs every step in dependency order.
 	 */
 	public function run(): void {
+		// Posts are inserted before their fields are set, so the §7 checks run once at the end instead.
+		$GLOBALS['gn_suspend_publish_checks'] = true;
+		try {
+			$this->import();
+		} finally {
+			$GLOBALS['gn_suspend_publish_checks'] = false;
+		}
+		$this->verify();
+	}
+
+	/**
+	 * Every seeded post and video must pass the §7 blocking checks (spec §11); warnings are fine.
+	 */
+	private function verify(): void {
+		foreach ( array( 'post' => 'posts', 'video' => 'videos' ) as $type => $key ) {
+			foreach ( $this->data[ $key ] ?? array() as $item ) {
+				$post = get_page_by_path( $item['slug'], OBJECT, $type );
+				if ( ! $post ) {
+					continue;
+				}
+				foreach ( gn_publish_problems( gn_publish_state( $post ) )['errors'] as $problem ) {
+					$this->warnings[] = "{$type} {$item['slug']} fails §7 ({$problem['code']}): {$problem['message']}";
+				}
+			}
+		}
+	}
+
+	private function import(): void {
 		$this->categories();
 		$this->tags();
 		$this->authors();

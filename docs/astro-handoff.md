@@ -38,7 +38,7 @@ WPGraphQL for ACF 3.0 (the current release) exposes some SCF field types differe
 | C14 | `Article` query, lead image | `featuredImage { node { sourceUrl(size: GN_LEAD) … } }` next to `...Summary` | Invalid GraphQL as written: `Summary` already selects `sourceUrl(size: GN_CARD)` on the same field, and GraphQL forbids the same field twice with different arguments unless one is aliased | Spec §4.9 fixed: `leadUrl: sourceUrl(size: GN_LEAD)` | **Astro: use the alias** |
 | C15 | Video thumbnail fallback (§4.6) | "fall back to the YouTube thumbnail URL in the GraphQL resolver" | Same result through the same fields. The thumbnail is downloaded into the media library when the video is saved, so it gets the crops and WebP and comes from our uploads. An editor's own image is never replaced. Some videos only have YouTube's small letterboxed `hqdefault` (480×360), so that card has black bars; upload a custom image for those | `includes/video-thumbnails.php`; spec §4.6 updated | Info |
 | C10 | `featuredImage.node.sourceUrl` host | `https://domain.com/shop/wp-content/uploads/…` | locally `http://localhost:8888/wp-content/uploads/…` (no `/shop`) | Expected locally (spec §3.1a). Astro must use the URL as given and never hard-code a host or `/shop` | Info |
-| C11 | `uri` | Astro URL (§6) | already relative and Astro-shaped: `/aloevera-pata-poche-jacche/` | Absolute links and canonicals come with M5 (§6) | Info |
+| C11 | `uri`, `link` | Astro URL (§6) | Since M5 both are the **absolute** public URL, e.g. `http://localhost:4321/kalojira/` locally and `https://domain.com/kalojira/` in production. Before M5, `uri` was relative (`/kalojira/`). Internal links inside `content` are rewritten to the same absolute URLs | Astro builds routes from `slug`, so nothing breaks. If Astro ever uses `uri` as a path, take its pathname | Info |
 | C12 | `author.node.description` | `bio?: string` | `null` when an author has no bio (2 of the 3 seed authors) | Treat `null` as "no bio" | Info |
 | C13 | `articleFields.featured` | not in the Astro types | exposed as `Boolean` (candidate list for the hero picker, §4.5) | Ignore it, or use it later for an editor-side hero picker | Info |
 
@@ -80,7 +80,8 @@ WPGraphQL for ACF 3.0 (the current release) exposes some SCF field types differe
 | B5 | A real `youtubeId` in the seed (S1) | §11 acceptance | Astro side or content owner | Resolved locally 2026-10-11 (stand-in IDs); real channel IDs before launch |
 | B6 | Astro task "Connect WordPress" (astro-todo §1) | The end-to-end contract test (`WP_GRAPHQL_URL=http://localhost:8888/graphql`) | Astro side | **First slice done 2026-10-11** (`src/lib/wordpress.ts`): every page type renders WordPress data, and the reference body is identical to the Astro file. Header promo and search chips added 2026-10-12. Still open on the Astro side: `gnSeo` in `BaseLayout`, `srcset`, info pages, `gn_build` auth |
 | B7 | A real medical reviewer: name and registration number (§8) | Production roles. Locally M5 uses a test user | Content owner | Before launch |
-| B8 | Preview route `/preview/` on the Astro site plus a shared HMAC secret (§10.2) | End-to-end preview (M6). WordPress can generate links and tokens without it | Astro side | Should, before M6 is verified |
+| B8 | Preview route `/preview/` on the Astro site plus a shared HMAC secret (§10.2) | End-to-end preview | Astro side | **Done 2026-10-16** (`src/pages/preview/index.astro`, `src/lib/preview.ts`), verified locally against WordPress. Production needs the secrets in B15 |
+| B15 | **Production secrets** (M7). WordPress `wp-config.php`: `GN_PUBLIC_URL`, `GN_BUILD_HOOK_URL`, `GN_PREVIEW_SECRET` (new random value, not the local one), `GN_REQUIRE_2FA=true`. Astro Worker secrets: `PREVIEW_SECRET` (= `GN_PREVIEW_SECRET`), `WP_BUILD_USER=gn-build`, `WP_BUILD_APP_PASSWORD` (from `wp gn build-user` on production). Astro build env: `WP_GRAPHQL_URL=https://domain.com/shop/graphql` | Production preview and rebuilds | You | M7 |
 | B9 | Workers Builds deploy hook URL (§10.1) | Production webhook only; locally the hook just logs | You (Cloudflare) | M7 |
 | B10 | Real domain registered and moved to Cloudflare (§13 open decision) | `GN_PUBLIC_URL`, canonicals, cookies and the Worker route in production | You | M7 |
 | B11 | Hostinger KVM 1 VPS, Cloudflare account, R2 bucket, server panel decision (§3.1–3.4, §13) | M7 | You | M7 |
@@ -89,6 +90,20 @@ WPGraphQL for ACF 3.0 (the current release) exposes some SCF field types differe
 | B14 | WordPress's sitemap URL for Astro's `robots.txt` (§9) | Nothing in v1. It will be `/shop/sitemap_index.xml` (Rank Math); it returns 404 until shop products exist, because every content type is off | WordPress side tells the Astro side | Later |
 
 ## 5. Changelog
+
+- **2026-10-16 (M6):**
+  - **Rebuild webhook (§10.1):** queued, at most one call per 60 seconds, retried, logged under Tools → Rebuild log. An editor save makes exactly one call.
+  - **Preview (§10.2):** a signed 10-minute token, the `gn_build` user via `wp gn build-user`, and the Astro `/preview/` route (B8 done).
+  - **Opened:** B15 (production secrets).
+  - **Checks:** the day-one check has 53 items.
+
+- **2026-10-14 (M5):**
+  - **Links and redirects (§6):** links rewritten to Astro URLs (C11 updated); WordPress front-end pages 301 to Astro; feeds and core sitemaps off.
+  - **Publish checks (§7):** blocking and warnings, all in Bengali.
+  - **Roles (§8):** `medical_reviewer`, `gn_build`, health articles by authors go to Pending, 2FA behind `GN_REQUIRE_2FA`.
+  - **Hardening (§3):** comments, pingbacks and XML-RPC off.
+  - **Decisions:** Bengali slugs are blocked, not transliterated; reviewers use editor Notes; feeds return 404.
+  - **Checks:** the day-one check has 51 items.
 
 - **2026-10-13 (M4):**
   - **Blocks:** the reference article is rebuilt from the §5 editor blocks; its GraphQL `content` matches `docs/reference/thankuni-patar-upokarita.html` structurally (`wp gn check-reference`).

@@ -23,6 +23,9 @@ require_once GN_CORE_DIR . 'includes/dependencies.php';
 require_once GN_CORE_DIR . 'includes/categories.php';
 require_once GN_CORE_DIR . 'includes/post-types.php';
 require_once GN_CORE_DIR . 'includes/urls.php';
+require_once GN_CORE_DIR . 'includes/links.php';
+require_once GN_CORE_DIR . 'includes/redirects.php';
+require_once GN_CORE_DIR . 'includes/hardening.php';
 require_once GN_CORE_DIR . 'includes/images.php';
 require_once GN_CORE_DIR . 'includes/video-thumbnails.php';
 require_once GN_CORE_DIR . 'includes/rank-math.php';
@@ -48,6 +51,17 @@ require_once GN_CORE_DIR . 'includes/graphql/homepage-options.php';
 require_once GN_CORE_DIR . 'includes/graphql/plain-text.php';
 require_once GN_CORE_DIR . 'includes/graphql/reading-minutes.php';
 require_once GN_CORE_DIR . 'includes/graphql/seo.php';
+require_once GN_CORE_DIR . 'includes/roles.php';
+require_once GN_CORE_DIR . 'includes/two-factor.php';
+require_once GN_CORE_DIR . 'includes/publish-checks/rules.php';
+require_once GN_CORE_DIR . 'includes/publish-checks/enforce.php';
+require_once GN_CORE_DIR . 'includes/publish-checks/settings.php';
+require_once GN_CORE_DIR . 'includes/publish-checks/editor.php';
+require_once GN_CORE_DIR . 'includes/webhook/delivery.php';
+require_once GN_CORE_DIR . 'includes/webhook/triggers.php';
+require_once GN_CORE_DIR . 'includes/webhook/admin.php';
+require_once GN_CORE_DIR . 'includes/webhook/mock.php';
+require_once GN_CORE_DIR . 'includes/preview.php';
 require_once GN_CORE_DIR . 'includes/setup.php';
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
